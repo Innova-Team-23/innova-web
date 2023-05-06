@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Pays;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -54,6 +56,7 @@ class UserController extends AbstractController
         $user->setNom($request->request->get('nom'));
         $user->setPrenom($request->request->get('prenom'));
         $role = $request->request->get('roles');
+        $idPay = $request->request->get('idPay');
         switch ($role) {
             case 'ROLE_ADMIN':
                 $user->setRoles(["ROLE_ADMIN"]);
@@ -68,6 +71,7 @@ class UserController extends AbstractController
         // hasher le mot de passe
         $password = $request->request->get('password');
         $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
+
 
 
         //$user->setProfil($request->request->get('profil')); // récupérer un fichier envoyé via le formulaire
@@ -89,6 +93,11 @@ class UserController extends AbstractController
             $user->setProfil("uploads/".$newFilename);
         }
 
+        $pays = $em->getRepository(Pays::class)->find($idPay);
+        if (!$pays) {
+            throw new NotFoundHttpException('Pays not found');
+        }
+        $user->setPays($pays);
 
         // Valider les données
         $errors = $validator->validate($user);
