@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Pays;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -32,6 +33,16 @@ class AppFixtures extends Fixture
         $userAdmin->setRoles(["ROLE_ADMIN"]);
         $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
         $manager->persist($userAdmin);
+        
+
+        //Creation pay
+        $pay = new Pays();
+        $pay->setLabel("Madagascar");
+        $manager->persist($pay);
+        $pay = new Pays();
+        $pay->setLabel("France");
+        $manager->persist($pay);
+
         $manager->flush();
     }
 }
