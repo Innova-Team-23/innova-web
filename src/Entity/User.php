@@ -56,6 +56,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "Date de naissance est obligatoire")]
     private ?string $dateNaissance = null;
 
+
+    #[ORM\OneToOne(targetEntity: Pays::class)]
+    #[ORM\JoinColumn(name: "id_pays", referencedColumnName: "id")]
+    private $pays;
+
+    
+    public function getPays(): ?Pays
+    {
+        return $this->pays;
+    }
+
+    public function setPays(?Pays $pays): self
+    {
+        $this->pays = $pays;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
