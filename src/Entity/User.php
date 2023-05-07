@@ -57,7 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $dateNaissance = null;
 
 
-    #[ORM\OneToOne(targetEntity: Pays::class)]
+    #[ORM\ManyToOne(targetEntity: Pays::class)]
     #[ORM\JoinColumn(name: "id_pays", referencedColumnName: "id")]
     private $pays;
 

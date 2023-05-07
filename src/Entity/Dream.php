@@ -24,6 +24,10 @@ class Dream
     #[Groups(["getDreams"])]
     private ?string $date = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(["getDreams"])]
+    private ?string $type = null;
+
     
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "id_users", referencedColumnName: "id")]
@@ -70,6 +74,18 @@ class Dream
     public function setDate(string $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
