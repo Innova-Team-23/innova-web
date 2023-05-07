@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     images_directory: '%kernel.project_dir%/public/uploads'
+    locale: 'fr'
 
 
 services:
@@ -12,6 +13,12 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    google_translate:
+        class: Google\Cloud\Translate\V2\TranslateClient
+        arguments:
+            - '%env(GOOGLE_APPLICATION_CREDENTIALS)%'
+            - { key: '%env(GOOGLE_APPLICATION_CREDENTIALS)%' }
+    TranslateClient: '@google_translate'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
